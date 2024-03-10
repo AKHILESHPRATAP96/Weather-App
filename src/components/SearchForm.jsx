@@ -4,6 +4,7 @@ import WeatherInfo from "./WeatherInfo";
 import WeatherForecast from "./WeatherForecast";
 
 import { useState } from "react";
+import EnqueBar from "./enquebar";
 
 function SearchForm(props) {
   const [weatherData, setWeatherData] = useState({ ready: false });
@@ -38,7 +39,13 @@ function SearchForm(props) {
     const apiKey = "aa09763d916df0424c840d55bfc2d2c9";
     let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
 
-    axios.get(apiUrl).then(handleResponse);
+    axios.get(apiUrl)
+    .then(handleResponse)
+    .catch(error => {
+      console.error("Error fetching weather data:", error);
+      setWeatherData({ ready: false });
+    });
+
   }
 
   if (weatherData.ready) {
@@ -74,7 +81,7 @@ function SearchForm(props) {
     );
   } else {
     search();
-    return "Loading";
+    return <EnqueBar/>;
   }
 }
 
